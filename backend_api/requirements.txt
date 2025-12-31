@@ -2,3 +2,9 @@ fastapi
 pydentic
 sqlalchemy
 uvicorn
+pydantic-settings
+passlib[bcrypt]
+email-validator
+asyncpg
+greenlet
+bcrypt==4.0.1
