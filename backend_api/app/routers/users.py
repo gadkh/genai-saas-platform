@@ -1,8 +1,11 @@
+from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from ..schemas.user import UserResponse, UserCreate
 from ..services.user_service import create_user, get_user
 from ..db.session import get_db
+from ..deps import get_current_user
+from ..db.models.user import User
 
 router = APIRouter(prefix="/user", tags=["USER"])
 
@@ -17,9 +20,12 @@ async def register_user(user: UserCreate, db: AsyncSession = Depends(get_db)):
     new_user = await create_user(db=db,user=user)
     return new_user
 
-@router.get("/{user_id}", response_model=UserResponse)
-async def read_user(user_id: str, db: AsyncSession = Depends(get_db)):
-    user = await get_user(db=db, user_id=user_id)
-    if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return user
+@router.get("/me", response_model=UserResponse)
+async def read_users_me(
+    current_user: Annotated[User, Depends(get_current_user)]
+):
+    """
+    Get current user.
+    Requires authentication (JWT token).
+    """
+    return current_user
