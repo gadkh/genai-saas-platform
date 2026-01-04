@@ -1,5 +1,5 @@
 fastapi
-pydentic
+pydantic
 sqlalchemy
 uvicorn
 pydantic-settings
@@ -8,3 +8,5 @@ email-validator
 asyncpg
 greenlet
 bcrypt==4.0.1
+python-multipart
+python-jose[cryptography]
