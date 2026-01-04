@@ -17,3 +17,9 @@ async def register_user(user: UserCreate, db: AsyncSession = Depends(get_db)):
     new_user = await create_user(db=db,user=user)
     return new_user
 
+@router.get("/{user_id}", response_model=UserResponse)
+async def read_user(user_id: str, db: AsyncSession = Depends(get_db)):
+    user = await get_user(db=db, user_id=user_id)
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return user
